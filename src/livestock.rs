@@ -162,13 +162,80 @@ impl LivestockManager {
         }
     }
 
+    pub fn delete_animal(&mut self, id: u64) -> bool {
+        if self.animals.remove(&id).is_some() {
+            self.health_alerts.retain(|alert| alert.animal_id != id);
+            true
+        } else {
+            false
+        }
+    }
+
     // Query methods
     pub fn get_animal(&self, id: u64) -> Option<Livestock> {
         self.animals.get(&id)
     }
 
+    pub fn get_all_animals(&self) -> Vec<Livestock> {
+        self.animals.values().collect()
+    }
+
     pub fn get_health_alerts(&self) -> Vec<HealthAlert> {
         self.health_alerts.clone()
+    }
+
+    pub fn get_pedigree(&self, animal_id: u64) -> Option<ParentIds> {
+        self.animals.get(&animal_id).and_then(|animal| animal.parent_ids)
+    }
+
+    pub fn get_average_age(&self) -> f32 {
+        let total_age: u32 = self.animals.values().map(|animal| animal.age as u32).sum();
+        let count = self.animals.len() as u32;
+        if count == 0 {
+            0.0
+        } else {
+            total_age as f32 / count as f32
+        }
+    }
+
+    pub fn get_average_height(&self) -> f32 {
+        let total_height: f32 = self.animals.values().map(|animal| animal.height).sum();
+        let count = self.animals.len() as u32;
+        if count == 0 {
+            0.0
+        } else {
+            total_height / count as f32
+        }
+    }
+
+    pub fn get_sick_animals(&self) -> Vec<Livestock> {
+        self.animals.values()
+            .filter(|animal| animal.healthstatus == HealthStatus::Sick)
+            .collect()
+    }
+
+    pub fn get_healthy_animals(&self) -> Vec<Livestock> {
+        self.animals.values()
+            .filter(|animal| animal.healthstatus == HealthStatus::Healthy)
+            .collect()
+    }
+
+    pub fn get_critical_animals(&self) -> Vec<Livestock> {
+        self.animals.values()
+            .filter(|animal| animal.healthstatus == HealthStatus::Critical)
+            .collect()
+    }
+
+    pub fn get_recovering_animals(&self) -> Vec<Livestock> {
+        self.animals.values()
+            .filter(|animal| animal.healthstatus == HealthStatus::Recovering)
+            .collect()
+    }
+
+    pub fn get_animal_per_breed(&self, breed: &str) -> Vec<Livestock> {
+        self.animals.values()
+            .filter(|animal| animal.breed.to_lowercase() == breed.to_lowercase())
+            .collect()
     }
 
     pub fn get_statistics(&self) -> HashMap<String, u64> {

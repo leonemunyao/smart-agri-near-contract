@@ -1,0 +1,1 @@
+Cloned<Filter<impl Iterator<Item = Livestock> + '_, {closure@src/livestock.rs:213:21: 213:29}>>

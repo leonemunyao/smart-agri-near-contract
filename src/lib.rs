@@ -4,7 +4,6 @@ use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::{near_bindgen, PanicOnDefault, env};
 use near_sdk::collections::UnorderedMap;
 use std::collections::HashMap;
-// use crate::livestock::{Livestock, HealthStatus};
 
 
 #[cfg(test)]
@@ -12,11 +11,8 @@ mod tests {
     pub mod livestock_tests;
 }
 
-// mod crop;
 mod livestock;
-// mod defi;
-// mod types;
-// mod market;
+
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
@@ -69,5 +65,45 @@ impl SmartAgriContract {
     pub fn get_livestock_statistics(&self) -> HashMap<String, u64> {
         self.livestock_manager.get_statistics()
     }
+    pub fn delete_animal(&mut self, id: u64) -> bool {
+        self.livestock_manager.delete_animal(id)
+    }
+
+    pub fn get_all_animals(&self) -> Vec<livestock::Livestock> {
+        self.livestock_manager.get_all_animals()
+    }
+
+    pub fn get_pedigree(&self, animal_id: u64) -> Option<livestock::ParentIds> {
+        self.livestock_manager.get_pedigree(animal_id)
+    }
+
+    pub fn get_average_age(&self) -> f32 {
+        self.livestock_manager.get_average_age()
+    }
+
+    pub fn get_average_height(&self) -> f32 {
+        self.livestock_manager.get_average_height()
+    }
+
+    pub fn get_sick_animals(&self) -> Vec<livestock::Livestock> {
+        self.livestock_manager.get_sick_animals()
+    }
+
+    pub fn get_healthy_animals(&self) -> Vec<livestock::Livestock> {
+        self.livestock_manager.get_healthy_animals()
+    }
+
+    pub fn get_critical_animals(&self) -> Vec<livestock::Livestock> {
+        self.livestock_manager.get_critical_animals()
+    }
+
+    pub fn get_recovering_animals(&self) -> Vec<livestock::Livestock> {
+        self.livestock_manager.get_recovering_animals()
+    }
+
+    pub fn get_animal_per_breed(&self, breed: String) -> Vec<livestock::Livestock> {
+        self.livestock_manager.get_animal_per_breed(&breed)
+    }
+
 }
 
