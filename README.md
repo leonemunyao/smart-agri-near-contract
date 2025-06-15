@@ -1,4 +1,4 @@
-## Smart Agri NEAR Contract - Livestock Management System
+## Livestock Management System
 
 A blockchain-based livestock management system built on the NEAR Protocol that enables efficient tracking and management of livestock data.
 
