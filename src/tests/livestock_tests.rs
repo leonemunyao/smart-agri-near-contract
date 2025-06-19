@@ -17,7 +17,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Test creating an animal
         let animal_id = contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -36,7 +36,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract     = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract     = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create parent animals
         let parent1_id = contract.create_animal(3, "Angus".to_string(), 1.6);
@@ -61,7 +61,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create an animal
         let animal_id = contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -85,7 +85,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create an animal
         let animal_id = contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -107,7 +107,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create an animal
         let animal_id = contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -131,7 +131,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create multiple animals
         contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -157,7 +157,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create an animal
         let animal_id = contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -176,7 +176,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create multiple animals
         contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -194,7 +194,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create parent animals
         let parent1_id = contract.create_animal(3, "Angus".to_string(), 1.6);
@@ -216,7 +216,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create multiple animals with different heights
         contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -235,7 +235,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create multiple animals with different ages
         contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -254,7 +254,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create animals with different health statuses
         let healthy_animal_id = contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -277,7 +277,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create animals with different health statuses
         let healthy_animal_id = contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -300,7 +300,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create animals with different health statuses
         let healthy_animal_id = contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -323,7 +323,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create animals with different health statuses
         let healthy_animal_id = contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -346,7 +346,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
 
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
 
         // Create animals of different breeds
         let angus_id = contract.create_animal(2, "Angus".to_string(), 1.5);
@@ -369,7 +369,7 @@ mod tests {
         let context = get_context("owner.near".parse().unwrap());
         testing_env!(context.build());
         
-        let mut contract = SmartAgriContract::new("owner.near".parse().unwrap());
+        let mut contract = SmartAgriContract::init("owner.near".parse().unwrap());
         
         // Create an animal
         let animal_id = contract.create_animal(2, "Angus".to_string(), 1.5);

@@ -100,27 +100,25 @@ The first step is to create a Near testnet account and make it accessible via `n
 
 1. Create a sub-account for the contract:
 ```bash
-near create-account smart-agri.YOUR_ACCOUNT.testnet --masterAccount YOUR_ACCOUNT.testnet --initialBalance 10
+near create-account livestock.YOUR_ACCOUNT.testnet --masterAccount YOUR_ACCOUNT.testnet --initialBalance 10
 ```
 
 2. Deploy the contract:
 ```bash
-near deploy smart-agri.YOUR_ACCOUNT.testnet \
-    target/wasm32-unknown-unknown/release/smart_agri_near_contract.wasm \
-    --initFunction 'new' \
-    --initArgs '{"owner_id": "YOUR_ACCOUNT.testnet"}'
+near deploy livestock.YOUR_ACCOUNT.testnet \
+    target/wasm32-unknown-unknown/release/smart_agri_near_contract.wasm
 ```
 
 * You can then interact with your contract using NEAR CLI. Here are some example commands:
 
 ##### Create an animal
-`near call YOUR_TESTNET_ACCOUNT.testnet create_animal '{"age": 2, "breed": "Angus", "height": 1.5}' --accountId YOUR_TESTNET_ACCOUNT.testnet`
+`near call livestock.YOUR_ACCOUNT.testnet create_animal '{"age": 2, "breed": "Angus", "height": 1.5}' --accountId YOUR_TESTNET_ACCOUNT.testnet`
 
 ##### Get animal details
-`near view YOUR_TESTNET_ACCOUNT.testnet get_animal '{"id": 1}'`
+`near view livestock.YOUR_ACCOUNT.testnet get_animal '{"id": 1}'`
 
 ##### Update health status
-`near call YOUR_TESTNET_ACCOUNT.testnet update_health_status '{"id": 1 "new_status": "Sick"}' --accountId YOUR_TESTNET_ACCOUNT.testnet`
+`near call livestock.YOUR_ACCOUNT.testnet update_health_status '{"id": 1 "new_status": "Sick"}' --accountId YOUR_TESTNET_ACCOUNT.testnet`
 
 ##### Get statistics
-`near view YOUR_TESTNET_ACCOUNT.testnet get_livestock_statistics '{}'`# smart-agri-near-contract
+`near view livestock.YOUR_ACCOUNT.testnet get_livestock_statistics '{}'`# smart-agri-near-contract

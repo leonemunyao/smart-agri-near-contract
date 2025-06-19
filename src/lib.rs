@@ -1,8 +1,5 @@
-// Contract entry points and initialization
-
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::{near_bindgen, PanicOnDefault, env};
-use near_sdk::collections::UnorderedMap;
+use near_sdk::{near_bindgen, AccountId, PanicOnDefault, env};
 use std::collections::HashMap;
 
 
@@ -14,26 +11,23 @@ mod tests {
 mod livestock;
 
 
+
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct SmartAgriContract {
-    owner_id: String,
-    livestock_manager: livestock::LivestockManager,
+    pub owner_id: AccountId,
+    pub livestock_manager: livestock::LivestockManager,
 }
 
 #[near_bindgen]
 impl SmartAgriContract {
     #[init]
-    pub fn new(owner_id: String) -> Self {
+    pub fn init(owner_id: AccountId) -> Self {
         assert!(!env::state_exists(), "Contract is already initialized");
         
         Self {
-            owner_id: owner_id,
-            livestock_manager: livestock::LivestockManager {
-                animals: UnorderedMap::new(b"a"),
-                health_alerts: Vec::new(),
-                next_id: 0,
-            },
+            owner_id,
+            livestock_manager: livestock::LivestockManager::new(),
         }
     }
 
@@ -103,6 +97,11 @@ impl SmartAgriContract {
 
     pub fn get_animal_per_breed(&self, breed: String) -> Vec<livestock::Livestock> {
         self.livestock_manager.get_animal_per_breed(&breed)
+    }
+
+    // Owner Management
+    pub fn get_owner_id(&self) -> AccountId {
+        self.owner_id.clone()
     }
 
 }
