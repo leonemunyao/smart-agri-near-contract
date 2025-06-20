@@ -1,1 +1,0 @@
-/home/leone/Coding/smart-agri-near-contract/target/wasm32-unknown-unknown/debug/libsmart_agri_near_contract.rlib: /home/leone/Coding/smart-agri-near-contract/src/lib.rs /home/leone/Coding/smart-agri-near-contract/src/livestock.rs

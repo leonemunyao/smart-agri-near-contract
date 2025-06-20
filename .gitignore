@@ -1,0 +1,27 @@
+# Environment variables
+.env
+
+# Build artifacts
+/target
+target/
+debug/
+release/
+
+# Tests
+/tests/
+src/tests/
+**/tests/
+
+# IDE specific files
+.vscode/
+.idea/
+*.iml
+
+# Rust specific
+**/*.rs.bk
+*.pdb
+Cargo.lock
+
+# Operating System specific
+.DS_Store
+thumbs.db
