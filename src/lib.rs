@@ -24,15 +24,14 @@ impl SmartAgriContract {
     #[init]
     pub fn init(owner_id: AccountId) -> Self {
         assert!(!env::state_exists(), "Contract is already initialized");
-        
         Self {
             owner_id,
-            livestock_manager: livestock::LivestockManager::new(),
+            livestock_manager: livestock::LivestockManager::new()
         }
     }
 
     // Livestock management functions
-    pub fn create_animal(&mut self, age: u8, breed: String, height: f32) -> u64 {
+    pub fn create_animal(&mut self, age: u8, breed: String, height: u32) -> u64 {
         self.livestock_manager.create_animal(age, breed, height)
     }
 
@@ -40,16 +39,16 @@ impl SmartAgriContract {
         self.livestock_manager.breed_animals(parent1_id, parent2_id, breed)
     }
 
-    pub fn update_health_status(&mut self, id: u64, new_status: livestock::HealthStatus) -> bool {
-        self.livestock_manager.update_health_status(id, new_status)
+    pub fn update_health_status(&mut self, id: String, new_status: livestock::HealthStatus) -> bool {
+        self.livestock_manager.update_health_status(id.to_string(), new_status)
     }
 
-    pub fn add_medication(&mut self, animal_id: u64, name: String, dosage: String) -> bool {
-        self.livestock_manager.add_medication(animal_id, name, dosage)
+    pub fn add_medication(&mut self, animal_id: String, name: String, dosage: String) -> bool {
+        self.livestock_manager.add_medication(animal_id.to_string(), name, dosage)
     }
 
-    pub fn get_animal(&self, id: u64) -> Option<livestock::Livestock> {
-        self.livestock_manager.get_animal(id)
+    pub fn get_animal(&self, id: String) -> Option<livestock::Livestock> {
+        self.livestock_manager.get_animal(id.to_string())
     }
 
     pub fn get_health_alerts(&self) -> Vec<livestock::HealthAlert> {
@@ -59,7 +58,7 @@ impl SmartAgriContract {
     pub fn get_livestock_statistics(&self) -> HashMap<String, u64> {
         self.livestock_manager.get_statistics()
     }
-    pub fn delete_animal(&mut self, id: u64) -> bool {
+    pub fn delete_animal(&mut self, id: String) -> bool {
         self.livestock_manager.delete_animal(id)
     }
 
@@ -67,15 +66,15 @@ impl SmartAgriContract {
         self.livestock_manager.get_all_animals()
     }
 
-    pub fn get_pedigree(&self, animal_id: u64) -> Option<livestock::ParentIds> {
+    pub fn get_pedigree(&self, animal_id: String) -> Option<livestock::ParentIds> {
         self.livestock_manager.get_pedigree(animal_id)
     }
 
-    pub fn get_average_age(&self) -> f32 {
+    pub fn get_average_age(&self) -> u32 {
         self.livestock_manager.get_average_age()
     }
 
-    pub fn get_average_height(&self) -> f32 {
+    pub fn get_average_height(&self) -> u32 {
         self.livestock_manager.get_average_height()
     }
 

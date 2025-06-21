@@ -3,19 +3,20 @@ use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::{env, BorshStorageKey};
 use near_sdk::collections::UnorderedMap;
 use std::collections::HashMap;
+use schemars::JsonSchema;
 
 #[derive(BorshSerialize, BorshStorageKey)]
 enum StorageKey {
     Animals,
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone, Debug)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone, Debug, JsonSchema)]
 #[serde(crate = "near_sdk::serde")]
 pub struct Livestock {
     pub id: u64,
     pub breed: String,
     pub age: u8,
-    pub height: f32,
+    pub height: u32,
     pub healthrecords: String,
     pub healthstatus: HealthStatus,
     pub medical_records: Vec<Medication>,
@@ -24,7 +25,7 @@ pub struct Livestock {
     pub updated_at: Option<u64>,
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone, Debug)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone, Debug, JsonSchema)]
 #[serde(crate = "near_sdk::serde")]
 pub struct Medication {
     pub id: u64,
@@ -34,7 +35,7 @@ pub struct Medication {
     pub end_date: u64,
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone, Debug)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone, Debug, JsonSchema)]
 #[serde(crate = "near_sdk::serde")]
 pub struct ParentIds {
     pub parent1_id: u64,
@@ -42,7 +43,7 @@ pub struct ParentIds {
 
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone, Debug)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone, Debug, JsonSchema)]
 #[serde(crate = "near_sdk::serde")]
 pub struct HealthAlert {
     pub animal_id: u64,
@@ -50,7 +51,7 @@ pub struct HealthAlert {
     pub timestamp: u64,
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone, Debug, PartialEq, Eq, Hash, JsonSchema)]
 #[serde(crate = "near_sdk::serde")]
 pub enum HealthStatus {
     Healthy,
@@ -62,7 +63,7 @@ pub enum HealthStatus {
 
 #[derive(BorshDeserialize, BorshSerialize)]
 pub struct LivestockManager {
-    pub animals: UnorderedMap<u64, Livestock>,
+    pub animals: UnorderedMap<String, Livestock>,
     pub health_alerts: Vec<HealthAlert>,
     pub next_id: u64,
 }
@@ -85,7 +86,7 @@ impl Default for LivestockManager {
 
 
 impl LivestockManager {
-    pub fn create_animal(&mut self, age: u8, breed: String, height: f32) -> u64 {
+    pub fn create_animal(&mut self, age: u8, breed: String, height: u32) -> u64 {
         let id = self.next_id;
         self.next_id += 1;
 
@@ -102,69 +103,70 @@ impl LivestockManager {
             updated_at: None,
         };
 
-        self.animals.insert(&id, &animal);
+        self.animals.insert(&id.to_string(), &animal);
         id
     }
 
     pub fn breed_animals(&mut self, parent1_id: u64, parent2_id: u64, breed: String) -> Option<u64> {
-        if self.animals.get(&parent1_id).is_some() && self.animals.get(&parent2_id).is_some() {
-            let offspring_id = self.create_animal(0, breed, 0.0);
-            let mut offspring = self.animals.get(&offspring_id).unwrap();
+        if self.animals.get(&parent1_id.to_string()).is_some() && self.animals.get(&parent2_id.to_string()).is_some() {
+            let offspring_id = self.create_animal(0, breed, 0);
+            let mut offspring = self.animals.get(&offspring_id.to_string()).unwrap();
             
             offspring.parent_ids = Some(ParentIds {
                 parent1_id,
                 parent2_id,
             });
             
-            self.animals.insert(&offspring_id, &offspring);
+            self.animals.insert(&offspring_id.to_string(), &offspring);
             Some(offspring_id)
         } else {
             None
         }
     }
 
-    pub fn update_health_status(&mut self, id: u64, new_status: HealthStatus) -> bool {
-        if let Some(mut animal) = self.animals.get(&id) {
+    pub fn update_health_status(&mut self, id: String, new_status: HealthStatus) -> bool {
+        if let Some(mut animal) = self.animals.get(&id.to_string()) {
             animal.healthstatus = new_status.clone();
             animal.healthrecords = format!("{:?}", new_status);
             animal.updated_at = Some(env::block_timestamp());
 
             if new_status != HealthStatus::Healthy {
                 self.health_alerts.push(HealthAlert {
-                    animal_id: id,
+                    animal_id: id.parse::<u64>().unwrap(),
                     status: new_status,
                     timestamp: env::block_timestamp(),
                 });
             }
 
-            self.animals.insert(&id, &animal);
+            self.animals.insert(&id.to_string(), &animal);
             true
         } else {
             false
         }
     }
 
-    pub fn add_medication(&mut self, animal_id: u64, name: String, dosage: String) -> bool {
-        if let Some(mut animal) = self.animals.get(&animal_id) {
+    pub fn add_medication(&mut self, animal_id: String, name: String, dosage: String) -> bool {
+        if let Some(mut animal) = self.animals.get(&animal_id.to_string()) {
             let medication = Medication {
                 id: animal.medical_records.len() as u64 + 1,
                 name,
                 dosage,
                 start_date: env::block_timestamp(),
-                end_date: env::block_timestamp() + 86400_000_000_000, // 1 day in nanoseconds
+                end_date: env::block_timestamp() + 86_400_000_000_000, // 1 day in nanoseconds
             };
             
             animal.medical_records.push(medication);
-            self.animals.insert(&animal_id, &animal);
+            self.animals.insert(&animal_id.to_string(), &animal);
             true
         } else {
             false
         }
     }
 
-    pub fn delete_animal(&mut self, id: u64) -> bool {
-        if self.animals.remove(&id).is_some() {
-            self.health_alerts.retain(|alert| alert.animal_id != id);
+    pub fn delete_animal(&mut self, id: String) -> bool {
+        if self.animals.remove(&id.to_string()).is_some() {
+            let id_u64 = id.parse::<u64>().unwrap_or(0);
+            self.health_alerts.retain(|alert| alert.animal_id != id_u64);
             true
         } else {
             false
@@ -172,8 +174,8 @@ impl LivestockManager {
     }
 
     // Query methods
-    pub fn get_animal(&self, id: u64) -> Option<Livestock> {
-        self.animals.get(&id)
+    pub fn get_animal(&self, id: String) -> Option<Livestock> {
+        self.animals.get(&id.to_string())
     }
 
     pub fn get_all_animals(&self) -> Vec<Livestock> {
@@ -184,27 +186,27 @@ impl LivestockManager {
         self.health_alerts.clone()
     }
 
-    pub fn get_pedigree(&self, animal_id: u64) -> Option<ParentIds> {
-        self.animals.get(&animal_id).and_then(|animal| animal.parent_ids)
+    pub fn get_pedigree(&self, animal_id: String) -> Option<ParentIds> {
+        self.animals.get(&animal_id.to_string()).and_then(|animal| animal.parent_ids)
     }
 
-    pub fn get_average_age(&self) -> f32 {
+    pub fn get_average_age(&self) -> u32 {
         let total_age: u32 = self.animals.values().map(|animal| animal.age as u32).sum();
         let count = self.animals.len() as u32;
         if count == 0 {
-            0.0
+            0
         } else {
-            total_age as f32 / count as f32
+            total_age / count
         }
     }
 
-    pub fn get_average_height(&self) -> f32 {
-        let total_height: f32 = self.animals.values().map(|animal| animal.height).sum();
+    pub fn get_average_height(&self) -> u32 {
+        let total_height: u32 = self.animals.values().map(|animal| animal.height).sum();
         let count = self.animals.len() as u32;
         if count == 0 {
-            0.0
+            0
         } else {
-            total_height / count as f32
+            total_height / count
         }
     }
 
